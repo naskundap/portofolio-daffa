@@ -21,7 +21,7 @@ export default function AboutSection() {
         >
           <span className="text-primary font-medium mb-2 block">Tentang Saya</span>
           <h2 className="font-display text-3xl md:text-5xl font-bold mb-4">
-            Mengenal Lebih Dekat
+            Muhammad Daffa Al Atha
           </h2>
           <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
         </motion.div>
@@ -54,7 +54,7 @@ export default function AboutSection() {
             className="space-y-6"
           >
             <h3 className="font-display text-2xl md:text-3xl font-bold">
-              Passionate Developer &amp; Creator
+              Developer &amp; Fotografer
             </h3>
             <p className="text-muted-foreground leading-relaxed">
               Saya adalah seorang Fullstack Web Developer dengan passion yang kuat dalam menciptakan 

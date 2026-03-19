@@ -7,8 +7,6 @@ import ProjectsSection from '@/components/ProjectsSection';
 import CertificatesSection from '@/components/CertificatesSection';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
-
-// 1. IMPORT FAQ DISINI
 import FAQ from '@/components/FAQ';
 
 const Index = () => {

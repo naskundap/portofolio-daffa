@@ -2,22 +2,19 @@ import { motion } from 'framer-motion';
 import { ArrowDown, Github, Instagram } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ThreeScene from './ThreeScene';
+import { useMemo } from 'react';
 
 export default function HeroSection() {
-  
-  // FUNGSI SCROLL YANG DIPERBAIKI
+
   const scrollToSection = (sectionId: string) => {
-    // Menghapus karakter '#' jika ada agar konsisten
     const id = sectionId.replace('#', '');
     const element = document.getElementById(id);
 
     if (element) {
-      element.scrollIntoView({ 
+      element.scrollIntoView({
         behavior: 'smooth',
-        block: 'start' // Memastikan scroll berhenti tepat di awal section
+        block: 'start'
       });
-    } else {
-      console.warn(`Elemen dengan id="${id}" tidak ditemukan! Pastikan di file tujuan sudah ada id tersebut.`);
     }
   };
 
@@ -26,14 +23,55 @@ export default function HeroSection() {
     { Icon: Instagram, href: "https://instagram.com/mdfalth" },
   ];
 
-  return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-hero">
-      <ThreeScene />
+  // 🌧️ DATA HUJAN
+  const raindrops = useMemo(() => {
+    return Array.from({ length: 100 }).map((_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      duration: 0.6 + Math.random() * 0.8,
+      delay: Math.random() * 2,
+      height: 15 + Math.random() * 25,
+    }));
+  }, []);
 
+  return (
+    <section
+      id="home"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-hero"
+    >
+
+      {/* 🌌 BACKGROUND (Three.js PALING BAWAH) */}
+      <div className="absolute inset-0 z-0">
+        {/* <ThreeScene /> */}
+      </div>
+
+      {/* 🌧️ RAIN EFFECT (DI ATAS BACKGROUND) */}
+      <div className="absolute inset-0 z-[2] pointer-events-none">
+        {raindrops.map((drop) => (
+          <motion.div
+            key={drop.id}
+            className="absolute w-[2px] bg-white/70 dark:bg-white/40 rounded-full blur-[0.5px]"
+            style={{
+              left: `${drop.left}%`,
+              height: drop.height,
+            }}
+            initial={{ y: "-10%" }}
+            animate={{ y: "110%" }}
+            transition={{
+              repeat: Infinity,
+              duration: drop.duration,
+              delay: drop.delay,
+              ease: "linear",
+            }}
+          />
+        ))}
+      </div>
+
+      {/* 🔹 CONTENT (PALING ATAS) */}
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
 
-          {/* FOTO PROFIL */}
+          {/* FOTO */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -42,20 +80,19 @@ export default function HeroSection() {
           >
             <motion.div
               whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.3 }}
               className="hover-target cursor-pointer"
             >
               <img
-                src="/foto-profil.jpeg" 
+                src="/foto-profil.jpeg"
                 alt="Profile"
                 className="w-80 h-80 md:w-96 md:h-96 object-cover rounded-full border-4 border-primary shadow-glow"
               />
             </motion.div>
           </motion.div>
 
-          {/* TEKS & TOMBOL */}
+          {/* TEXT */}
           <div className="w-full lg:w-1/2 text-center lg:text-left">
-            <motion.span 
+            <motion.span
               className="inline-block px-4 py-2 rounded-full glass text-sm font-medium text-primary mb-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -72,19 +109,18 @@ export default function HeroSection() {
             </motion.p>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-8 justify-center lg:justify-start">
-              {/* TOMBOL LIHAT PROJECTS */}
-              <Button 
-                size="lg" 
+
+              <Button
+                size="lg"
                 className="rounded-full px-8 shadow-glow"
                 onClick={() => scrollToSection('projects')}
               >
                 Lihat Projects
               </Button>
 
-              {/* TOMBOL HUBUNGI SAYA */}
-              <Button 
-                variant="outline" 
-                size="lg" 
+              <Button
+                variant="outline"
+                size="lg"
                 className="rounded-full px-8"
                 onClick={() => scrollToSection('contact')}
               >
@@ -92,13 +128,13 @@ export default function HeroSection() {
               </Button>
             </div>
 
-            {/* SOSIAL MEDIA */}
+            {/* SOCIAL */}
             <div className="flex gap-4 justify-center lg:justify-start">
               {socialLinks.map((social, i) => (
-                <a 
-                  key={i} 
-                  href={social.href} 
-                  target="_blank" 
+                <a
+                  key={i}
+                  href={social.href}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="p-3 rounded-full glass hover:scale-110 transition-transform"
                 >
@@ -110,10 +146,10 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* ARROW DOWN */}
+      {/* 🔽 ARROW */}
       <motion.button
         onClick={() => scrollToSection('projects')}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 p-3 rounded-full glass animate-float"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 p-3 rounded-full glass animate-float z-10"
       >
         <ArrowDown className="h-5 w-5 text-primary" />
       </motion.button>

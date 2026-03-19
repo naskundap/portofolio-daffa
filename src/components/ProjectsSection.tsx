@@ -56,18 +56,25 @@ const projects = [
 
 export default function ProjectsSection() {
   return (
-    <section className="py-20 md:py-32 bg-muted/30">
+    /* TAMBAHKAN id="projects" DI SINI */
+    <section id="projects" className="py-20 md:py-32 bg-muted/30 transition-colors duration-500">
       <div className="container mx-auto px-4">
 
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold">
-            Projects
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
+            Featured Projects
           </h2>
-        </div>
+          <div className="h-1.5 w-20 bg-primary mx-auto mt-4 rounded-full" />
+        </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {projects.map((project, index) => (
-            <ProjectCard key={index} project={project} />
+            <ProjectCard key={index} project={project} index={index} />
           ))}
         </div>
 
@@ -77,29 +84,28 @@ export default function ProjectsSection() {
 }
 
 /* ========================= */
-/* CARD */
+/* CARD COMPONENT */
 /* ========================= */
 
-function ProjectCard({ project }) {
+function ProjectCard({ project, index }) {
   const [current, setCurrent] = useState(0);
   const [paused, setPaused] = useState(false);
 
-  // AUTO SLIDE
   useEffect(() => {
     if (paused) return;
-
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % project.images.length);
     }, 2500);
-
     return () => clearInterval(interval);
   }, [paused, project.images.length]);
 
-  const nextSlide = () => {
+  const nextSlide = (e) => {
+    e.stopPropagation();
     setCurrent((prev) => (prev + 1) % project.images.length);
   };
 
-  const prevSlide = () => {
+  const prevSlide = (e) => {
+    e.stopPropagation();
     setCurrent((prev) =>
       prev === 0 ? project.images.length - 1 : prev - 1
     );
@@ -107,78 +113,90 @@ function ProjectCard({ project }) {
 
   return (
     <motion.div
-      whileHover={{ scale: 1.03 }}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.1 }}
+      whileHover={{ y: -10 }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
-      className={`group p-6 rounded-2xl glass transition-all duration-300 ${project.glow}`}
+      className={`group p-5 rounded-3xl glass transition-all duration-500 ${project.glow} border border-white/10`}
     >
-      {/* CAROUSEL */}
-      <div className={`relative aspect-video rounded-xl mb-4 overflow-hidden bg-gradient-to-br ${project.gradient}`}>
+      {/* CAROUSEL CONTAINER */}
+      <div className={`relative aspect-video rounded-2xl mb-5 overflow-hidden bg-gradient-to-br ${project.gradient}`}>
 
         {/* SLIDES */}
         {project.images.map((img, i) => (
           <motion.div
             key={i}
-            animate={{ opacity: i === current ? 1 : 0 }}
-            transition={{ duration: 0.4 }}
-            className="absolute inset-0 flex items-center justify-center text-6xl"
+            animate={{ 
+              opacity: i === current ? 1 : 0,
+              scale: i === current ? 1 : 1.1 
+            }}
+            transition={{ duration: 0.5 }}
+            className="absolute inset-0 flex items-center justify-center text-6xl select-none"
           >
             {img}
           </motion.div>
         ))}
 
-        {/* PANAH */}
-        <button
-          onClick={prevSlide}
-          className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white p-2 rounded-full transition"
-        >
-          <ChevronLeft size={18} />
-        </button>
+        {/* NAVIGATION CONTROLS */}
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button
+              onClick={prevSlide}
+              className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white/40 text-white p-2 rounded-full transition-all"
+            >
+              <ChevronLeft size={20} />
+            </button>
 
-        <button
-          onClick={nextSlide}
-          className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white p-2 rounded-full transition"
-        >
-          <ChevronRight size={18} />
-        </button>
+            <button
+              onClick={nextSlide}
+              className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-md hover:bg-white/40 text-white p-2 rounded-full transition-all"
+            >
+              <ChevronRight size={20} />
+            </button>
+        </div>
 
-        {/* DOT */}
-        <div className="absolute bottom-2 w-full flex justify-center gap-1">
+        {/* INDICATORS (DOTS) */}
+        <div className="absolute bottom-3 w-full flex justify-center gap-1.5">
           {project.images.map((_, i) => (
             <div
               key={i}
-              className={`w-2 h-2 rounded-full ${
-                i === current ? 'bg-white' : 'bg-white/40'
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                i === current ? 'w-6 bg-white' : 'w-1.5 bg-white/30'
               }`}
             />
           ))}
         </div>
       </div>
 
-      {/* CONTENT */}
-      <div className="space-y-3">
-        <h3 className="font-bold text-lg">
-          {project.title}
-        </h3>
+      {/* PROJECT INFO */}
+      <div className="space-y-4">
+        <div className="flex justify-between items-start">
+            <h3 className="font-bold text-xl tracking-tight">
+              {project.title}
+            </h3>
+            <ExternalLink className="h-5 w-5 opacity-0 group-hover:opacity-50 transition-opacity" />
+        </div>
 
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-muted-foreground leading-relaxed">
           {project.description}
         </p>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 pt-2">
           {project.tags.map((tag) => (
-            <span key={tag} className="px-2 py-1 text-xs rounded-md bg-secondary">
+            <span key={tag} className="px-3 py-1 text-[10px] uppercase tracking-wider font-bold rounded-full bg-primary/10 text-primary border border-primary/20">
               {tag}
             </span>
           ))}
         </div>
 
-        <Button size="sm" className="rounded-full">
-          <ExternalLink className="h-4 w-4 mr-1" />
-          Lihat
+        <Button className="w-full mt-4 rounded-xl group/btn overflow-hidden relative">
+           <span className="relative z-10 flex items-center gap-2">
+             Lihat Project <ExternalLink className="h-4 w-4" />
+           </span>
         </Button>
       </div>
     </motion.div>
   );
 }
-

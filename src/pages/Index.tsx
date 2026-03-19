@@ -8,6 +8,9 @@ import CertificatesSection from '@/components/CertificatesSection';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 
+// 1. IMPORT FAQ DISINI
+import FAQ from '@/components/FAQ';
+
 const Index = () => {
   const [isDark, setIsDark] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -30,14 +33,22 @@ const Index = () => {
   const toggleTheme = () => setIsDark(!isDark);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
       <Navbar isDark={isDark} toggleTheme={toggleTheme} />
-      <HeroSection />
-      <AboutSection />
-      <SkillsSection />
-      <ProjectsSection />
-      <CertificatesSection />
-      <ContactSection />
+      
+      <main>
+        <HeroSection />
+        <AboutSection />
+        <SkillsSection />
+        <ProjectsSection />
+        <CertificatesSection />
+        
+        {/* 2. SELIPKAN FAQ DI ATAS CONTACT SECTION */}
+        <FAQ isDark={isDark} />
+        
+        <ContactSection />
+      </main>
+
       <Footer />
     </div>
   );

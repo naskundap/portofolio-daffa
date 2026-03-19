@@ -10,9 +10,6 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-// DATA SERTIFIKAT
-// Anda tinggal mengubah title, issuer, atau date saja di sini.
-// Nama file gambar sudah saya urutkan (foto1 sampai foto24).
 const certificates = [
   {
     id: 'cert-1',
@@ -78,10 +75,10 @@ const certificates = [
 
 export default function CertificatesSection() {
   return (
-    <section id="certificates" className="py-20 md:py-32 bg-background font-sans overflow-hidden">
+    /* id="karya" ditambahkan, bg tetap bg-background */
+    <section id="karya" className="py-20 md:py-32 bg-background font-sans overflow-hidden">
       <div className="container mx-auto px-4">
         
-        {/* HEADER */}
         <div className="text-center mb-16">
           <motion.h2 
             initial={{ opacity: 0, y: 10 }}
@@ -93,7 +90,6 @@ export default function CertificatesSection() {
           <div className="w-16 h-1 bg-primary mx-auto rounded-full" />
         </div>
 
-        {/* CAROUSEL UTAMA */}
         <div className="max-w-7xl mx-auto relative px-2 md:px-12">
           <Carousel opts={{ align: "start", loop: true }} className="w-full">
             <CarouselContent className="-ml-4">
@@ -105,7 +101,6 @@ export default function CertificatesSection() {
                     transition={{ delay: index * 0.1 }}
                     className="h-full border rounded-3xl overflow-hidden bg-card/50 backdrop-blur-sm flex flex-col shadow-sm hover:shadow-xl transition-all duration-300"
                   >
-                    {/* GAMBAR (CAROUSEL DALAM) */}
                     <div className="relative aspect-[4/3] overflow-hidden group/img">
                       <Carousel opts={{ loop: true }} className="w-full h-full">
                         <CarouselContent className="m-0 h-full">
@@ -115,27 +110,23 @@ export default function CertificatesSection() {
                                 src={img} 
                                 alt="Dokumentasi" 
                                 className="object-cover w-full h-full transition-transform duration-500 group-hover/img:scale-110"
-                                // Jika gambar tidak ketemu, akan pakai placeholder otomatis agar tidak hancur
                                 onError={(e) => { e.currentTarget.src = 'https://placehold.co/600x400?text=Foto+Belum+Ada'; }}
                               />
                             </CarouselItem>
                           ))}
                         </CarouselContent>
                         
-                        {/* Navigasi Kecil di Atas Gambar */}
                         <div className="absolute inset-0 flex items-center justify-between px-2 opacity-0 group-hover/img:opacity-100 transition-opacity">
                            <CarouselPrevious className="relative left-0 h-7 w-7 bg-black/50 text-white border-none" />
                            <CarouselNext className="relative right-0 h-7 w-7 bg-black/50 text-white border-none" />
                         </div>
 
-                        {/* Tag Kategori */}
                         <div className="absolute top-3 left-3 bg-primary/90 text-primary-foreground text-[10px] px-2 py-1 rounded-md font-bold uppercase">
                           {cert.category}
                         </div>
                       </Carousel>
                     </div>
 
-                    {/* TEKS & TOMBOL */}
                     <div className="p-6 flex flex-col flex-grow">
                       <div className="mb-4">
                         <div className="flex items-center gap-2 text-primary mb-1">

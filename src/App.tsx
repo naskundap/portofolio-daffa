@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-
+import MusicPlayer from "./components/MusicPlayer";
 // 1. Import CustomCursor kamu di sini
 
 
@@ -17,7 +17,7 @@ const App = () => (
     <TooltipProvider>
       {/* 2. Letakkan CustomCursor di sini agar muncul di seluruh halaman */}
       <CustomCursor />
-      
+      <MusicPlayer />
       <Toaster />
       <Sonner />
       <BrowserRouter>

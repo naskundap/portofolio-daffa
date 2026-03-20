@@ -1,20 +1,14 @@
 import { motion } from 'framer-motion';
 import { ArrowDown, Github, Instagram } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import ThreeScene from './ThreeScene';
-import { useMemo } from 'react';
 
 export default function HeroSection() {
 
   const scrollToSection = (sectionId: string) => {
     const id = sectionId.replace('#', '');
     const element = document.getElementById(id);
-
     if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
@@ -23,55 +17,47 @@ export default function HeroSection() {
     { Icon: Instagram, href: "https://instagram.com/mdfalth" },
   ];
 
-  // 🌧️ DATA HUJAN
-  const raindrops = useMemo(() => {
-    return Array.from({ length: 100 }).map((_, i) => ({
-      id: i,
-      left: Math.random() * 100,
-      duration: 0.6 + Math.random() * 0.8,
-      delay: Math.random() * 2,
-      height: 15 + Math.random() * 25,
-    }));
-  }, []);
-
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-hero"
+      className="
+      relative min-h-screen flex items-center justify-center overflow-hidden
+
+      bg-gradient-to-br 
+      from-white via-zinc-100 to-zinc-200 
+      dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-900
+      "
     >
 
-      {/* 🌌 BACKGROUND (Three.js PALING BAWAH) */}
-      <div className="absolute inset-0 z-0">
-        {/* <ThreeScene /> */}
-      </div>
-
-      {/* 🌧️ RAIN EFFECT (DI ATAS BACKGROUND) */}
-      <div className="absolute inset-0 z-[2] pointer-events-none">
-        {raindrops.map((drop) => (
+      {/* 🌧️ RAIN BACKGROUND */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        {[...Array(60)].map((_, i) => (
           <motion.div
-            key={drop.id}
-            className="absolute w-[2px] bg-white/70 dark:bg-white/40 rounded-full blur-[0.5px]"
-            style={{
-              left: `${drop.left}%`,
-              height: drop.height,
+            key={i}
+            className="
+              absolute w-[1px] h-14 
+              bg-black/10 dark:bg-white/10
+            "
+            initial={{
+              y: -100,
+              x: Math.random() * window.innerWidth,
+              opacity: Math.random(),
             }}
-            initial={{ y: "-10%" }}
-            animate={{ y: "110%" }}
+            animate={{ y: "120vh" }}
             transition={{
+              duration: 0.5 + Math.random(),
               repeat: Infinity,
-              duration: drop.duration,
-              delay: drop.delay,
+              delay: Math.random() * 2,
               ease: "linear",
             }}
           />
         ))}
       </div>
 
-      {/* 🔹 CONTENT (PALING ATAS) */}
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
 
-          {/* FOTO */}
+          {/* FOTO PROFIL */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -79,32 +65,71 @@ export default function HeroSection() {
             className="w-full lg:w-1/2 flex justify-center"
           >
             <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="hover-target cursor-pointer"
+              className="relative"
+              animate={{ y: [0, -15, 0] }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
             >
-              <img
+
+              {/* 🔥 GLOW ABU (LIGHT + DARK) */}
+              <motion.div
+                className="absolute inset-0 rounded-full blur-3xl opacity-40"
+                style={{
+                  background: `
+                    radial-gradient(circle, 
+                      rgba(120,120,120,0.25) 0%, 
+                      rgba(160,160,160,0.15) 40%, 
+                      transparent 70%)
+                  `,
+                }}
+                animate={{ scale: [1, 1.25, 1] }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+
+              {/* FOTO */}
+              <motion.img
                 src="/foto-profil.jpeg"
                 alt="Profile"
-                className="w-80 h-80 md:w-96 md:h-96 object-cover rounded-full border-4 border-primary shadow-glow"
+                className="
+                  relative w-80 h-80 md:w-96 md:h-96 
+                  object-cover rounded-full 
+                  border-4 border-primary 
+                  shadow-xl
+                "
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
               />
             </motion.div>
           </motion.div>
 
-          {/* TEXT */}
+          {/* TEKS */}
           <div className="w-full lg:w-1/2 text-center lg:text-left">
+
             <motion.span
-              className="inline-block px-4 py-2 rounded-full glass text-sm font-medium text-primary mb-6"
+              className="
+                inline-block px-4 py-2 rounded-full 
+                bg-black/5 dark:bg-white/5 
+                backdrop-blur 
+                text-sm font-medium text-primary mb-6
+              "
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
               👋 welcome to my portfolio
             </motion.span>
 
-            <motion.h1 className="font-display text-4xl md:text-6xl font-bold mb-6">
+            <motion.h1 className="font-display text-4xl md:text-6xl font-bold mb-6 text-zinc-900 dark:text-white">
               Daffa Portofolio
             </motion.h1>
 
-            <motion.p className="text-lg text-muted-foreground mb-8">
+            <motion.p className="text-lg text-zinc-600 dark:text-zinc-400 mb-8">
               Seorang siswa SMA yang sedang berkarya melalui kamera, laptop, handphone, dan hati.
             </motion.p>
 
@@ -112,7 +137,7 @@ export default function HeroSection() {
 
               <Button
                 size="lg"
-                className="rounded-full px-8 shadow-glow"
+                className="rounded-full px-8 shadow-md hover:scale-105 transition"
                 onClick={() => scrollToSection('projects')}
               >
                 Lihat Projects
@@ -121,14 +146,14 @@ export default function HeroSection() {
               <Button
                 variant="outline"
                 size="lg"
-                className="rounded-full px-8"
+                className="rounded-full px-8 hover:scale-105 transition"
                 onClick={() => scrollToSection('contact')}
               >
                 Hubungi Saya
               </Button>
             </div>
 
-            {/* SOCIAL */}
+            {/* SOSIAL */}
             <div className="flex gap-4 justify-center lg:justify-start">
               {socialLinks.map((social, i) => (
                 <a
@@ -136,9 +161,14 @@ export default function HeroSection() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 rounded-full glass hover:scale-110 transition-transform"
+                  className="
+                    p-3 rounded-full 
+                    bg-black/5 dark:bg-white/5 
+                    backdrop-blur 
+                    hover:scale-110 transition
+                  "
                 >
-                  <social.Icon className="h-5 w-5" />
+                  <social.Icon className="h-5 w-5 text-zinc-800 dark:text-white" />
                 </a>
               ))}
             </div>
@@ -146,13 +176,19 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* 🔽 ARROW */}
+      {/* ⬇️ ARROW */}
       <motion.button
         onClick={() => scrollToSection('projects')}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 p-3 rounded-full glass animate-float z-10"
+        className="
+          absolute bottom-8 left-1/2 -translate-x-1/2 p-3 rounded-full 
+          bg-black/5 dark:bg-white/5 backdrop-blur
+        "
+        animate={{ y: [0, 10, 0] }}
+        transition={{ repeat: Infinity, duration: 2 }}
       >
         <ArrowDown className="h-5 w-5 text-primary" />
       </motion.button>
+
     </section>
   );
 }
